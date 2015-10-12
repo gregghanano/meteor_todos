@@ -2,4 +2,29 @@
     <title>Todos</title>
 </head>
 <body>
+  <h1>What do you have to do today?</h1>
+  {{> addTodo}}
+  {{> todos}}
 </body>
+
+<template name="todos">
+  <ul>
+    {{#each todo}}
+      {{> todoItem}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name='todoItem'>
+  <li>
+    {{name}}
+    [<a href="#" class='delete-todo'>Delete</a>]
+  </li>
+</template>
+
+<template name="addTodo">
+  <form>
+      Create a task:
+      <input type='text' name='todoName' placeholder="Type a task here..." />
+  </form>
+</template>
