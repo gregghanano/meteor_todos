@@ -1,13 +1,17 @@
 Router.configure({
   layoutTemplate: 'main'
-})
-Todos = new Mongo.Collection('todos');
+});
+
+Todos = new Meteor.Collection('todos');
+Lists = new Meteor.Collection('lists');
+
 if(Meteor.isClient){
     // client code goes here
     //---- template Todos helpers ------
     Template.todos.helpers({
       'todo': function(){
-        return Todos.find({}, {sort: {createdAt: -1}});
+        var currentList = this._id;
+        return Todos.find({listId: currentList}, {sort: {createdAt: -1}});
       }
     });
     //-----end------
@@ -16,10 +20,12 @@ if(Meteor.isClient){
       'submit form':function(e){
         e.preventDefault();
         var todoName = $('[name="todoName"]').val();
+        var currentList = this._id;
         Todos.insert({
           name: todoName,
           completed: false,
-          createdAt: new Date()
+          createdAt: new Date(),
+          listId: currentList
         });
         $('[name="todoName"]').val('');
       }
@@ -66,13 +72,36 @@ if(Meteor.isClient){
     //------ template todosCount helpers ------
     Template.todosCount.helpers({
       'totalTodos': function(){
-        return Todos.find().count();
+        var currentList = this._id;
+        return Todos.find({listId: currentList}).count();
       },
       'completedTodos': function(){
-        return Todos.find({completed:true}).count();
+        var currentList = this._id;
+        return Todos.find({listId: currentList, completed:true}).count();
       }
     })
     //------ end -------
+    //------ template Add List events ---------
+    Template.addList.events({
+      'submit .add-list-form':function(e){
+        e.preventDefault();
+        var listName = $('.add-list-input').val();
+        Lists.insert({
+          name: listName
+        }, function(err, results){
+          Router.go('listPage', {_id:results});
+        });
+        $('.add-list-input').val('');
+      }
+    })
+    //------- end -------
+    //------- template Add List helpers --------
+    Template.lists.helpers({
+      'list':function(){
+        return Lists.find({}, {sort: {name: 1}});
+      }
+    })
+    //-------- end -------
 }
 
 if(Meteor.isServer){
@@ -85,3 +114,11 @@ Router.route('/', {
 });
 Router.route('/register');
 Router.route('/login');
+Router.route('/list/:_id', {
+  name: 'listPage',
+  template:'listPage',
+  data: function(){
+    var currentList = this.params._id;
+    return Lists.findOne({_id: currentList});
+  }
+});

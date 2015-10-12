@@ -1,17 +1,18 @@
-<!-- <head>
-    <title>Todos</title>
-</head>
-<body>
-  <h1>What do you have to do today?</h1>
-  <a href='/register'>Register</a> <a href='/login'>Login</a>
-  {{> addTodo}}
-  {{> todos}}
-</body> -->
+<template name='main'>
+  <h1>Todos</h1>
+  {{> navigation }}
+  {{> lists }}
+  {{>yield}}
+  <hr />
+  <p>Copyright &copy; Todos, 2014-2015</p>
+</template>
+
 <template name='home'>
   <p>Welcome to the Todos Application</p>
 </template>
 
 <template name="todos">
+  {{> addTodo}}
   <ul>
     {{#each todo}}
       {{> todoItem}}
@@ -48,17 +49,31 @@
   <h2>Login</h2>
 </template>
 
-<template name='main'>
-  <h1>Todos</h1>
-  {{> navigation }}
-  {{>yield}}
-  <hr />
-  <p>Copyright &copy; Todos, 2014-2015</p>
-</template>
 <template name='navigation'>
   <ul>
     <li><a href='{{pathFor route='home'}}'>Home</a></li>
     <li><a href='{{pathFor route='register'}}'>Register</a></li>
     <li><a href='{{pathFor route='login'}}'>Login</a></li>
   </ul>
+</template>
+
+<template name="lists">
+  <h2>Lists</h2>
+  {{> addList}}
+  <ul>
+    {{#each list}}
+    <li><a href='/{{pathFor route="listPage"}}'>{{name}}</a></li>
+    {{/each}}
+  </ul>
+</template>
+
+<template name="addList">
+  <form class='add-list-form'>Create a list:
+      <input type='text' class='add-list-input' name="listName" placeholder="List name here...." />
+  </form>
+</template>
+
+<template name="listPage">
+  <h2>Tasks: {{name}}</h2>
+  {{> todos}}
 </template>
