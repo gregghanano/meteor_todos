@@ -79,7 +79,7 @@ if(Meteor.isClient){
         var currentList = this._id;
         return Todos.find({listId: currentList, completed:true}).count();
       }
-    })
+    });
     //------ end -------
     //------ template Add List events ---------
     Template.addList.events({
@@ -93,15 +93,61 @@ if(Meteor.isClient){
         });
         $('.add-list-input').val('');
       }
-    })
+    });
     //------- end -------
     //------- template Add List helpers --------
     Template.lists.helpers({
       'list':function(){
         return Lists.find({}, {sort: {name: 1}});
       }
-    })
+    });
     //-------- end -------
+    //-------- template Register events ---------
+    Template.register.events({
+      'submit form':function(e){
+        event.preventDefault();
+        var email = $('[name=email]').val();
+        var password = $('[name=password]').val();
+        var fullName = $('[name=fullName]').val();
+        Accounts.createUser({
+          email: email,
+          password: password,
+          fullName: fullName
+        }, function(err){
+          if(err){
+            console.log(err.reason);
+          } else {
+            Router.go('home');
+          }
+        });
+      }
+    });
+    //-------- end -----------
+    //----------- template login events -----------
+    Template.login.events({
+      'submit form':function(e){
+        e.preventDefault();
+        var email = $('[name=email]').val();
+        var password = $('[name=password]').val();
+        Meteor.loginWithPassword(email, password, function(err){
+          if(err){
+            console.log(err.reason);
+          } else {
+            Router.go('home');
+          }
+        });
+      }
+    })
+    //-------- end -----------
+    //----------- template navigation events --------
+    Template.navigation.events({
+      'click .logout':function(e){
+        e.preventDefault();
+        Meteor.logout();
+        Router.go('login');
+      }
+    })
+    //--------- end ------------
 }
 
 if(Meteor.isServer){
