@@ -1,3 +1,6 @@
+Router.configure({
+  layoutTemplate: 'main'
+})
 Todos = new Mongo.Collection('todos');
 if(Meteor.isClient){
     // client code goes here
@@ -75,3 +78,10 @@ if(Meteor.isClient){
 if(Meteor.isServer){
     // server code goes here
 }
+//---------- Routes ---------
+Router.route('/', {
+  name: 'home',
+  template: 'home'
+});
+Router.route('/register');
+Router.route('/login');

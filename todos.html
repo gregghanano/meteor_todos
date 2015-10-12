@@ -1,11 +1,15 @@
-<head>
+<!-- <head>
     <title>Todos</title>
 </head>
 <body>
   <h1>What do you have to do today?</h1>
+  <a href='/register'>Register</a> <a href='/login'>Login</a>
   {{> addTodo}}
   {{> todos}}
-</body>
+</body> -->
+<template name='home'>
+  <p>Welcome to the Todos Application</p>
+</template>
 
 <template name="todos">
   <ul>
@@ -35,4 +39,26 @@
   {{#if totalTodos}}
   <p>You have completed {{completedTodos}} out of {{totalTodos}} tasks!</p>
   {{/if}}
+</template>
+
+<template name="register">
+  <h2>Register</h2>
+</template>
+<template name='login'>
+  <h2>Login</h2>
+</template>
+
+<template name='main'>
+  <h1>Todos</h1>
+  {{> navigation }}
+  {{>yield}}
+  <hr />
+  <p>Copyright &copy; Todos, 2014-2015</p>
+</template>
+<template name='navigation'>
+  <ul>
+    <li><a href='{{pathFor route='home'}}'>Home</a></li>
+    <li><a href='{{pathFor route='register'}}'>Register</a></li>
+    <li><a href='{{pathFor route='login'}}'>Login</a></li>
+  </ul>
 </template>
