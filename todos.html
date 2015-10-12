@@ -4,7 +4,7 @@
   {{#if currentUser}}
     {{> lists }}
   {{/if}}
-  {{>yield}}
+  {{> yield}}
   <hr />
   <p>Copyright &copy; Todos, 2014-2015</p>
 </template>
@@ -79,7 +79,7 @@
   {{> addList}}
   <ul>
     {{#each list}}
-    <li><a href='/{{pathFor route="listPage"}}'>{{name}}</a></li>
+    <li><a href='{{pathFor route="listPage"}}'>{{name}}</a></li>
     {{/each}}
   </ul>
 </template>
